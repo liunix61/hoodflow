@@ -310,7 +310,46 @@ print(f"Scan Result: {result}")
 
 ### 🌐 Vercel自动化部署
 
-#### 方式1: 使用Vercel CLI
+HoodFlow使用与robinhood-evm-mcp相同的前端部署配置，基于静态文件部署。
+
+#### Vercel配置文件
+
+项目包含 `vercel.json` 配置文件，参考robinhood-evm-mcp的部署配置：
+
+```json
+{
+  "cleanUrls": true,
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "deploy_app.html", "use": "@vercel/static" },
+    { "src": "ethers.umd.min.js", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/deploy", "dest": "/deploy_app.html" },
+    { "src": "/ethers.umd.min.js", "dest": "/ethers.umd.min.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://rpc.mainnet.chain.robinhood.com https://rpc.testnet.chain.robinhood.com wss://rpc.mainnet.chain.robinhood.com wss://rpc.testnet.chain.robinhood.com wss://*.walletconnect.com wss://*.walletlink.org wss://*.bridge.walletconnect.com;"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### 部署方式
+
+**方式1: 使用Vercel CLI**
 
 ```bash
 # 1. 安装Vercel CLI
@@ -323,32 +362,28 @@ vercel login
 vercel --prod
 
 # 4. 配置环境变量
-vercel env add DATABASE_URL
-vercel env add API_KEY
+vercel env add ROBINHOOD_CHAIN_RPC_URL
 ```
 
-#### 方式2: 使用GitHub集成
+**方式2: 使用GitHub集成**
 
 1. **连接GitHub仓库**：
    - 访问 https://vercel.com/new
    - 导入 `liunix61/hoodflow` 仓库
 
 2. **配置项目**：
-   - Framework Preset: Vite
+   - Framework Preset: Other
    - Root Directory: `.` (根目录)
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
+   - Build Command: `None` (静态文件部署)
 
 3. **设置环境变量**：
-   - `DATABASE_URL`: PostgreSQL连接字符串
-   - `API_KEY`: API密钥
    - `ROBINHOOD_CHAIN_RPC_URL`: Robinhood Chain RPC地址
 
 4. **部署**：
    - 点击 "Deploy"
    - Vercel自动部署到全球CDN
 
-#### 方式3: 使用Vercel Dashboard
+**方式3: 使用Vercel Dashboard**
 
 1. **创建新项目**：
    - 访问 https://vercel.com/dashboard
@@ -359,10 +394,10 @@ vercel env add API_KEY
    - 点击 "Import"
 
 3. **配置设置**：
-   - Framework: Vite
+   - Framework: Other
    - Root Directory: `.`
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
+   - Build Command: `None`
+   - Output Directory: `.`
 
 4. **部署**：
    - 点击 "Deploy"
@@ -376,38 +411,7 @@ vercel env add API_KEY
 - ✅ **域名绑定**: 支持自定义域名
 - ✅ **环境管理**: 支持多环境（开发/测试/生产）
 - ✅ **性能监控**: 内置性能监控和分析
-
-#### 环境变量配置
-
-在Vercel Dashboard中配置以下环境变量：
-
-```bash
-# 数据库配置
-DATABASE_URL=postgresql://user:***@host:5432/database
-
-# API配置
-API_KEY=your_a...n
-# Web3配置
-ROBINHOOD_CHAIN_RPC_URL=https://rpc.mainnet.chain.robinhood.com
-
-# Node.js版本
-NODE_VERSION=18
-```
-
-#### 自定义域名
-
-1. **添加域名**：
-   - 在Vercel Dashboard中点击 "Domains"
-   - 添加 `hoodflow.ai` 或自定义域名
-
-2. **配置DNS**：
-   - 在域名注册商处添加DNS记录
-   - 类型: CNAME
-   - 值: `cname.vercel-dns.com`
-
-3. **验证**：
-   - Vercel自动验证域名配置
-   - 等待SSL证书自动配置
+- ✅ **安全头**: Content-Security-Policy等安全配置
 
 ---
 
