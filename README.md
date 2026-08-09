@@ -308,6 +308,109 @@ print(f"Scan Result: {result}")
 
 ---
 
+### 🌐 Vercel自动化部署
+
+#### 方式1: 使用Vercel CLI
+
+```bash
+# 1. 安装Vercel CLI
+npm i -g vercel
+
+# 2. 登录Vercel
+vercel login
+
+# 3. 部署到Vercel
+vercel --prod
+
+# 4. 配置环境变量
+vercel env add DATABASE_URL
+vercel env add API_KEY
+```
+
+#### 方式2: 使用GitHub集成
+
+1. **连接GitHub仓库**：
+   - 访问 https://vercel.com/new
+   - 导入 `liunix61/hoodflow` 仓库
+
+2. **配置项目**：
+   - Framework Preset: Vite
+   - Root Directory: `.` (根目录)
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+
+3. **设置环境变量**：
+   - `DATABASE_URL`: PostgreSQL连接字符串
+   - `API_KEY`: API密钥
+   - `ROBINHOOD_CHAIN_RPC_URL`: Robinhood Chain RPC地址
+
+4. **部署**：
+   - 点击 "Deploy"
+   - Vercel自动部署到全球CDN
+
+#### 方式3: 使用Vercel Dashboard
+
+1. **创建新项目**：
+   - 访问 https://vercel.com/dashboard
+   - 点击 "Add New Project"
+
+2. **导入GitHub仓库**：
+   - 选择 `liunix61/hoodflow`
+   - 点击 "Import"
+
+3. **配置设置**：
+   - Framework: Vite
+   - Root Directory: `.`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+
+4. **部署**：
+   - 点击 "Deploy"
+   - 等待部署完成
+
+#### 部署优势
+
+- ✅ **自动CI/CD**: 每次push到main分支自动部署
+- ✅ **全球CDN**: 自动分发到全球节点
+- ✅ **HTTPS**: 自动配置SSL证书
+- ✅ **域名绑定**: 支持自定义域名
+- ✅ **环境管理**: 支持多环境（开发/测试/生产）
+- ✅ **性能监控**: 内置性能监控和分析
+
+#### 环境变量配置
+
+在Vercel Dashboard中配置以下环境变量：
+
+```bash
+# 数据库配置
+DATABASE_URL=postgresql://user:***@host:5432/database
+
+# API配置
+API_KEY=your_a...n
+# Web3配置
+ROBINHOOD_CHAIN_RPC_URL=https://rpc.mainnet.chain.robinhood.com
+
+# Node.js版本
+NODE_VERSION=18
+```
+
+#### 自定义域名
+
+1. **添加域名**：
+   - 在Vercel Dashboard中点击 "Domains"
+   - 添加 `hoodflow.ai` 或自定义域名
+
+2. **配置DNS**：
+   - 在域名注册商处添加DNS记录
+   - 类型: CNAME
+   - 值: `cname.vercel-dns.com`
+
+3. **验证**：
+   - Vercel自动验证域名配置
+   - 等待SSL证书自动配置
+
+---
+
 ## 工程化
 
 ### 🛠️ 项目结构
