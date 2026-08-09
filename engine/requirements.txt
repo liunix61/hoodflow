@@ -1,0 +1,22 @@
+# HoodFlow Requirements
+# 基于robinhood-evm-mcp扩展
+
+# 核心依赖（继承自robinhood-evm-mcp）
+web3>=6.0.0
+aiosqlite>=0.19.0
+
+# HoodFlow扩展依赖
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# 异步支持
+asyncio>=3.4.3
+
+# 测试
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# 代码质量
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
